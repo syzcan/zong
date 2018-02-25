@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://www.springframework.org/schema/cache 
+    http://www.springframework.org/schema/cache/spring-cache.xsd">
+	<description>缓存配置</description>
+
+	<!--Redis缓存配置 begin -->
+	<!-- 加载数据源配置文件 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:redis.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- jedis pool配置 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<property name="minIdle" value="${redis.minIdle}" />
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+	</bean>
+
+	<!-- spring data redis -->
+	<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="usePool" value="true" />
+		<property name="hostName" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+		<property name="password" value="${redis.password}" />
+		<property name="timeout" value="${redis.timeout}" />
+		<property name="database" value="${redis.default.db}" />
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+	</bean>
+
+	<!-- 定义redisTemplate -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+		<property name="keySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+	</bean>
+
+	<!-- 定义redisCacheManager并设置过期时间 -->
+	<bean id="redisCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager" c:template-ref="redisTemplate">
+		<property name="defaultExpiration" value="${redis.timeToLive}" />
+	</bean>
+
+	<!-- 定义redisCacheManager并设置过期时间 -->
+	<bean id="redisService" class="com.zong.core.cache.impl.RedisServiceImpl">
+		<property name="redisTemplate" ref="redisTemplate" />
+		<property name="defaultExpiration" value="${redis.timeToLive}" />
+	</bean>
+	<!--Redis配置 end -->
+
+	<!-- EhCache缓存配置 begin -->
+	<!-- Spring提供的基于的Ehcache实现的缓存管理器 -->
+	<bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+	</bean>
+	<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehCacheManagerFactory" />
+	</bean>
+	<bean id="ehcacheService" class="com.zong.core.cache.impl.EhcacheServiceImpl">
+		<property name="cacheManager" ref="ehCacheManager" />
+	</bean>
+	<!-- EhCache配置 end -->
+
+	<!-- Spring自带缓存，基于java.util.concurrent.ConcurrentHashMap实现的缓存管理器(该功能是从Spring3.1开始提供的) -->
+	<!-- <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager"> -->
+	<!-- <property name="caches"> -->
+	<!-- <set> -->
+	<!-- <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"> -->
+	<!-- <property name="name" value="default" /> -->
+	<!-- </bean> -->
+	<!-- <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"> -->
+	<!-- <property name="name" value="dataCache" /> -->
+	<!-- </bean> -->
+	<!-- </set> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+
+	<!-- Key生成策略配置 -->
+<!-- 	<bean id="userKeyGenerator" class="com.zong.core.cache.UserKeyGenerator" /> -->
+	<!-- 启用缓存注解功能，redisCacheManager【ehCacheManager】 -->
+<!-- 	<cache:annotation-driven cache-manager="ehCacheManager" key-generator="userKeyGenerator" /> -->
+	<!-- <cache:annotation-driven cache-manager="redisCacheManager" key-generator="userKeyGenerator" /> -->
+
+	<!-- 定义tokenService -->
+	<bean id="tokenService" class="com.zong.core.cache.TokenService">
+		<!-- 使用redisService缓存token -->
+		<property name="cacheService" ref="redisService" />
+		<!-- token失效延续时间秒 -->
+		<property name="defaultExpiration" value="3600" />
+	</bean>
+</beans> 

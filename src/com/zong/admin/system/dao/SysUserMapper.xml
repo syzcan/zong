@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zong.admin.system.dao.SysUserMapper" >
+  <resultMap id="BaseResultMap" type="com.zong.admin.system.bean.SysUser" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="last_login" property="lastLogin" jdbcType="TIMESTAMP" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="auth_key" property="authKey" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,
+    username,
+    password,
+    nickname,
+    gender,
+    birthday,
+    avatar,
+    remark,
+    status,
+    last_login,
+    ip,
+    auth_key,
+    create_time,
+    update_time
+  </sql>
+  
+  <!-- 根据对象主键查询 -->
+  <select id="load" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_user
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </select>
+  
+  <!-- 根据条件分页查询 -->
+  <select id="findSysUserPage" resultMap="BaseResultMap" >
+    select * from sys_user where 1 = 1
+    <if test='pd.keyword != null and pd.keyword != ""'>
+   	and nickname like concat('%', #{pd.keyword},'%')
+    </if>
+    <if test='pd.sort=="updateTime"'>
+    order by update_time ${pd.order}
+    </if>
+    <if test='pd.sort=="lastLogin"'>
+    order by last_login ${pd.order}
+    </if>
+    <if test='pd.sort == null'>
+    order by create_time desc
+    </if>
+  </select>
+  
+  <!-- 根据条件查询全部 -->
+  <select id="findSysUser" resultMap="BaseResultMap" >
+    select * from sys_user where 1 = 1
+    <if test='username != null and username != ""'>
+    and username = #{username}
+    </if>
+    <if test='authKey != null and authKey != ""'>
+    and auth_key = #{authKey}
+    </if>
+  </select>
+  
+  <!-- 根据对象主键删除 -->
+  <delete id="delete" >
+    delete from sys_user
+    where
+    id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <!-- 插入对象全部属性的字段 -->
+  <insert id="insert" parameterType="com.zong.admin.system.bean.SysUser" >
+    insert into sys_user (<include refid="Base_Column_List" />)
+    values( 
+    	#{id,jdbcType=VARCHAR},
+    	#{username,jdbcType=VARCHAR},
+    	#{password,jdbcType=VARCHAR},
+    	#{nickname,jdbcType=VARCHAR},
+    	#{gender,jdbcType=VARCHAR},
+    	#{birthday,jdbcType=TIMESTAMP},
+    	#{avatar,jdbcType=VARCHAR},
+    	#{remark,jdbcType=VARCHAR},
+    	#{status,jdbcType=INTEGER},
+    	#{lastLogin,jdbcType=TIMESTAMP},
+    	#{ip,jdbcType=VARCHAR},
+    	#{authKey,jdbcType=VARCHAR},
+    	#{createTime,jdbcType=TIMESTAMP},
+    	#{updateTime,jdbcType=TIMESTAMP}
+  	)
+  </insert>
+  
+  <!-- 根据主键更新对象不为空属性的字段 -->
+  <update id="update" parameterType="com.zong.admin.system.bean.SysUser" >
+    update sys_user
+    <set>
+      	<if test="username != null" >
+        	username = #{username,jdbcType=VARCHAR},
+      	</if>
+      	<if test="password != null" >
+        	password = #{password,jdbcType=VARCHAR},
+      	</if>
+      	<if test="nickname != null" >
+        	nickname = #{nickname,jdbcType=VARCHAR},
+      	</if>
+      	<if test="gender != null" >
+        	gender = #{gender,jdbcType=VARCHAR},
+      	</if>
+      	<if test="birthday != null" >
+        	birthday = #{birthday,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="avatar != null" >
+        	avatar = #{avatar,jdbcType=VARCHAR},
+      	</if>
+      	<if test="remark != null" >
+        	remark = #{remark,jdbcType=VARCHAR},
+      	</if>
+      	<if test="status != null" >
+        	status = #{status,jdbcType=INTEGER},
+      	</if>
+      	<if test="lastLogin != null" >
+        	last_login = #{lastLogin,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="ip != null" >
+        	ip = #{ip,jdbcType=VARCHAR},
+      	</if>
+      	<if test="authKey != null" >
+        	auth_key = #{authKey,jdbcType=VARCHAR},
+      	</if>
+      	<if test="createTime != null" >
+        	create_time = #{createTime,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="updateTime != null" >
+        	update_time = #{updateTime,jdbcType=TIMESTAMP}
+      	</if>
+    </set>
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </update>
+</mapper>

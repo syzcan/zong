@@ -1,0 +1,222 @@
+/**整体字体*/
+body {
+	font-size: 14px;
+	color: #333;
+	background: #fff;
+	font-family: "Microsoft YaHei"
+}
+/**工具栏和tab微调*/
+.tabs-tool {
+	border-top: 0;
+	border-right: 0
+}
+
+.easyui-toolbar {
+	padding: 5px
+}
+/**去掉圆角*/
+.l-btn, .textbox, .textbox .textbox-text {
+	border-radius: 0
+}
+.window, .window-shadow {
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+/* .fa{background: none;font-size: 16px} */
+/**按钮颜色*/
+.btn-green {
+	border: 1px solid #2c7;
+	color: #2c7;
+}
+
+.btn-blue {
+	border: 1px solid #0ae;
+	color: #0ae;
+}
+
+.btn-red {
+	border: 1px solid #e33;
+	color: #e33;
+}
+
+.btn-cyan {
+	border: 1px solid #0a8;
+	color: #0a8;
+}
+
+.btn-yellow {
+	border: 1px solid #f60;
+	color: #f60;
+}
+
+.btn-mix {
+	border: 1px solid #aed;
+	color: #aed;
+}
+
+.btn-gray {
+	border: 1px solid #999;
+	color: #999;
+}
+
+.btn-red-light {
+	border: 1px solid #fcd;
+	color: #fcd;
+}
+
+.btn-green:hover {
+	border: 1px solid #2c7;
+	color: #fff;
+	background: #2c7
+}
+
+.btn-blue:hover {
+	border: 1px solid #0ae;
+	color: #fff;
+	background: #0ae
+}
+
+.btn-red:hover {
+	border: 1px solid #e33;
+	color: #fff;
+	background: #e33
+}
+
+.btn-cyan:hover {
+	border: 1px solid #0a8;
+	color: #fff;
+	background: #0a8
+}
+
+.btn-yellow:hover {
+	border: 1px solid #f60;
+	color: #fff;
+	background: #f60
+}
+
+.btn-mix:hover {
+	border: 1px solid #aed;
+	color: #fff;
+	background: #aed
+}
+
+.btn-gray:hover {
+	border: 1px solid #999;
+	color: #fff;
+	background: #999
+}
+
+.btn-red-light:hover {
+	border: 1px solid #fcd;
+	color: #fff;
+	background: #fcd
+}
+/**徽章*/
+.badge {
+	display: inline-block;
+	min-width: 10px;
+	padding: 3px 7px;
+	margin:1px;
+	font-size: 12px;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	background-color: #999;
+	border-radius: 2em
+}
+
+.badge:empty {
+	display: none
+}
+
+.badge.bg-back, .badge.bg-mix {
+	color: inherit
+}
+
+.badge.bg-white, .badge.bg-red-light, .badge.bg-yellow-light, .badge.bg-blue-light,
+	.badge.bg-green-light {
+	color: #333
+}
+
+.badge-corner {
+	position: relative
+}
+
+.badge-corner .badge {
+	position: absolute;
+	right: -10px;
+	top: -9px;
+	font-weight: normal;
+	cursor: pointer
+}
+/**背景色*/
+.bg-black {
+	background-color: #000
+}
+
+.bg-gray {
+	background-color: #999
+}
+
+.bg-white {
+	background-color: #fff
+}
+
+.bg-red {
+	background-color: #e33
+}
+
+.bg-yellow {
+	background-color: #f60
+}
+
+.bg-blue {
+	background-color: #0ae
+}
+
+.bg-green {
+	background-color: #2c7
+}
+
+.bg-red-light {
+	background-color: #fee
+}
+
+.bg-yellow-light {
+	background-color: #ffd
+}
+
+.bg-blue-light {
+	background-color: #eff
+}
+
+.bg-green-light {
+	background-color: #efd
+}
+/**字体色*/
+.text-gray, a.text-gray:link, a.text-gray:visited {
+	color: #999
+}
+
+.text-white, a.text-white:link, a.text-white:visited {
+	color: #fff
+}
+
+.text-red, a.text-red:link, a.text-red:visited {
+	color: #e33
+}
+
+.text-yellow, a.text-yellow:link, a.text-yellow:visited {
+	color: #f60
+}
+
+.text-blue, a.text-blue:link, a.text-blue:visited {
+	color: #0ae
+}
+
+.text-green, a.text-green:link, a.text-green:visited {
+	color: #2c7
+}

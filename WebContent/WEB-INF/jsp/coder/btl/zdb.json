@@ -1,0 +1,24 @@
+{
+	"dbs":[
+        {
+			"dbname": "zbase",
+			"jdbc.driverClassName": "com.mysql.jdbc.Driver",
+			"jdbc.url": "jdbc:mysql://localhost:3306/zbase",
+			"jdbc.username": "root",
+			"jdbc.password": "123456"
+		},
+		{
+			"dbname": "dwr",
+			"jdbc.driverClassName": "com.mysql.jdbc.Driver",
+			"jdbc.url": "jdbc:mysql://localhost:3306/dwr",
+			"jdbc.username": "root",
+			"jdbc.password": "123456"
+		},{
+			"dbname": "zboot",
+			"jdbc.driverClassName": "com.mysql.jdbc.Driver",
+			"jdbc.url": "jdbc:mysql://localhost:3306/zboot",
+			"jdbc.username": "root",
+			"jdbc.password": "123456"
+		}
+	]
+}

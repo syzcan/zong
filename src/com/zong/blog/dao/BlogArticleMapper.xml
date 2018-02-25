@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zong.blog.dao.BlogArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.zong.blog.bean.BlogArticle" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="cate_id" property="cateId" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+    <result column="click_count" property="clickCount" jdbcType="INTEGER" />
+    <result column="reply_count" property="replyCount" jdbcType="INTEGER" />
+    <result column="nature" property="nature" jdbcType="VARCHAR" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,
+    cate_id,
+    title,
+    content,
+    description,
+    cover,
+    click_count,
+    reply_count,
+    nature,
+    tags,
+    url,
+    status,
+    user_id,
+    create_time,
+    update_time
+  </sql>
+  
+  <!-- 根据对象主键查询 -->
+  <select id="load" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from blog_article
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </select>
+  
+  <!-- 根据条件分页查询 -->
+  <select id="findBlogArticlePage" resultMap="BaseResultMap" >
+    select * from blog_article where 1 = 1
+    <if test='pd.keyword != null and pd.keyword != ""'>
+    	and (title like concat(concat('%', #{pd.keyword}),'%') or description like concat(concat('%', #{pd.keyword}),'%'))
+    </if>
+    <if test='pd.cate_id != null and pd.cate_id != ""'>
+    	and cate_id = #{pd.cate_id}
+    </if>
+    order by update_time desc
+  </select>
+  
+  <!-- 根据条件查询全部 -->
+  <select id="findBlogArticle" resultMap="BaseResultMap" >
+    select * from blog_article where 1 = 1
+    <if test='keyword != null and keyword != ""'>
+    </if>
+  </select>
+  
+  <!-- 根据对象主键删除 -->
+  <delete id="delete" >
+    delete from blog_article
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </delete>
+  
+  <!-- 插入对象全部属性的字段 -->
+  <insert id="insert" parameterType="com.zong.blog.bean.BlogArticle" >
+    insert into blog_article (<include refid="Base_Column_List" />)
+    values( 
+    	#{id,jdbcType=VARCHAR},
+    	#{cateId,jdbcType=VARCHAR},
+    	#{title,jdbcType=VARCHAR},
+    	#{content,jdbcType=VARCHAR},
+    	#{description,jdbcType=VARCHAR},
+    	#{cover,jdbcType=VARCHAR},
+    	#{clickCount,jdbcType=INTEGER},
+    	#{replyCount,jdbcType=INTEGER},
+    	#{nature,jdbcType=VARCHAR},
+    	#{tags,jdbcType=VARCHAR},
+    	#{url,jdbcType=VARCHAR},
+    	#{status,jdbcType=INTEGER},
+    	#{userId,jdbcType=VARCHAR},
+    	#{createTime,jdbcType=TIMESTAMP},
+    	#{updateTime,jdbcType=TIMESTAMP}
+  	)
+  </insert>
+  
+  <!-- 根据主键更新对象不为空属性的字段 -->
+  <update id="update" parameterType="com.zong.blog.bean.BlogArticle" >
+    update blog_article
+    <set>
+      	<if test="cateId != null" >
+        	cate_id = #{cateId,jdbcType=VARCHAR},
+      	</if>
+      	<if test="title != null" >
+        	title = #{title,jdbcType=VARCHAR},
+      	</if>
+      	<if test="content != null" >
+        	content = #{content,jdbcType=VARCHAR},
+      	</if>
+      	<if test="description != null" >
+        	description = #{description,jdbcType=VARCHAR},
+      	</if>
+      	<if test="cover != null" >
+        	cover = #{cover,jdbcType=VARCHAR},
+      	</if>
+      	<if test="clickCount != null" >
+        	click_count = #{clickCount,jdbcType=INTEGER},
+      	</if>
+      	<if test="replyCount != null" >
+        	reply_count = #{replyCount,jdbcType=INTEGER},
+      	</if>
+      	<if test="nature != null" >
+        	nature = #{nature,jdbcType=VARCHAR},
+      	</if>
+      	<if test="tags != null" >
+        	tags = #{tags,jdbcType=VARCHAR},
+      	</if>
+      	<if test="url != null" >
+        	url = #{url,jdbcType=VARCHAR},
+      	</if>
+      	<if test="status != null" >
+        	status = #{status,jdbcType=INTEGER},
+      	</if>
+      	<if test="userId != null" >
+        	status = #{userId,jdbcType=VARCHAR},
+      	</if>
+      	<if test="createTime != null" >
+        	create_time = #{createTime,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="updateTime != null" >
+        	update_time = #{updateTime,jdbcType=TIMESTAMP},
+      	</if>
+    </set>
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </update>
+</mapper>

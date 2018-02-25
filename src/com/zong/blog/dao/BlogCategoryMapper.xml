@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zong.blog.dao.BlogCategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.zong.blog.bean.BlogCategory" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,
+    name,
+    description
+  </sql>
+  
+  <!-- 根据对象主键查询 -->
+  <select id="load" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from blog_category
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </select>
+  
+  <!-- 根据条件分页查询 -->
+  <select id="findBlogCategoryPage" resultMap="BaseResultMap" >
+    select * from blog_category where 1 = 1
+    <if test='pd.keyword != null and pd.keyword != ""'>
+    	<!-- and 字段 like concat(concat('%', #{pd.keyword}),'%') -->
+    </if>
+  </select>
+  
+  <!-- 根据条件查询全部 -->
+  <select id="findBlogCategory" resultMap="BaseResultMap" >
+    select * from blog_category where 1 = 1
+    <if test='keyword != null and keyword != ""'>
+    </if>
+  </select>
+  
+  <!-- 根据对象主键删除 -->
+  <delete id="delete" >
+    delete from blog_category
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </delete>
+  
+  <!-- 插入对象全部属性的字段 -->
+  <insert id="insert" parameterType="com.zong.blog.bean.BlogCategory" >
+    insert into blog_category (<include refid="Base_Column_List" />)
+    values( 
+    	#{id,jdbcType=VARCHAR},
+    	#{name,jdbcType=VARCHAR},
+    	#{description,jdbcType=VARCHAR}
+  	)
+  </insert>
+  
+  <!-- 根据主键更新对象不为空属性的字段 -->
+  <update id="update" parameterType="com.zong.blog.bean.BlogCategory" >
+    update blog_category
+    <set>
+      	<if test="name != null" >
+        	name = #{name,jdbcType=VARCHAR},
+      	</if>
+      	<if test="description != null" >
+        	description = #{description,jdbcType=VARCHAR},
+      	</if>
+    </set>
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </update>
+</mapper>

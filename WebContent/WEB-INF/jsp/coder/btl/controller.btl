@@ -1,0 +1,147 @@
+package ${packageController};
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ${packageBean}.${className};
+import ${packageService}.${className}Service;
+import com.zong.core.bean.Page;
+import com.zong.core.bean.Result;
+import com.zong.core.controller.BaseController;
+import com.zong.core.exception.ServiceException;
+
+/**
+ * @desc ${objectName}控制层 ${comment}
+ * @author zong
+ * @date ${date(),"yyyy年MM月dd日"}
+ */
+@Controller
+@RequestMapping(value = "/${packageJsp==''?'':packageJsp+'/'}${objectName}")
+public class ${className}Controller extends BaseController {
+	private final static Logger LOGGER = LoggerFactory.getLogger(${className}Controller.class);
+
+	@Autowired
+	private ${className}Service ${objectName}Service;
+
+	/**
+	 * 查询${objectName}列表
+	 */
+	@RequestMapping(value = "/list")
+	public String list() {
+		return "/${packageJsp==''?'':packageJsp+'/'}${objectName}/${objectName}_list";
+	}
+	
+	/**
+	 * 新增${objectName}页面
+	 */
+	@RequestMapping(value = "/toAdd")
+	public String toAdd() {
+		return "/${packageJsp==''?'':packageJsp+'/'}${objectName}/${objectName}_form";
+	}
+
+	/**
+	 * 修改${objectName}页面
+	 */
+	@RequestMapping(value = "/toEdit")
+	public String toEdit() {
+		return "/${packageJsp==''?'':packageJsp+'/'}${objectName}/${objectName}_form";
+	}
+	
+	/**
+	 * 新增${objectName}
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/add")
+	public Result add(${className} ${objectName}) {
+		Result result = Result.success();
+		try {
+			${objectName}Service.add${className}(${objectName});
+		} catch (ServiceException e) {
+			LOGGER.warn(e.getMessage());
+			result.error(e);
+		} catch (Exception e) {
+			LOGGER.error(e.toString(), e);
+			result.error(e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 修改${objectName}
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/edit")
+	public Result edit(${className} ${objectName}) {
+		Result result = Result.success();
+		try {
+			${objectName}Service.edit${className}(${objectName});
+		} catch (ServiceException e) {
+			LOGGER.warn(e.getMessage());
+			result.error(e);
+		} catch (Exception e) {
+			LOGGER.error(e.toString(), e);
+			result.error(e);
+		}
+		return result;
+	}
+
+	/**
+	 * 删除${objectName}
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/delete")
+	public Result delete(${className} ${objectName}) {
+		Result result = Result.success();
+		try {
+			${objectName}Service.delete${className}(${objectName});
+		} catch (ServiceException e) {
+			LOGGER.warn(e.getMessage());
+			result.error(e);
+		} catch (Exception e) {
+			LOGGER.error(e.toString(), e);
+			result.error(e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 查询${objectName}详情data
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/data")
+	public Result data(${className} ${objectName}) {
+		Result result = Result.success();
+		try {
+			${objectName} = ${objectName}Service.load${className}(${objectName});
+			result.put("data", ${objectName});
+		} catch (Exception e) {
+			LOGGER.error(e.toString(), e);
+			result.error(e);
+		}
+		return result;
+	}
+
+	/**
+	 * 查询${objectName}列表datas
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/datas")
+	public Result datas() {
+		Result result = Result.success();
+		try {
+			Page page = super.getPage();
+			List<${className}> ${objectName}s = ${objectName}Service.find${className}Page(page);
+			result.put("rows", ${objectName}s).put("total", page.getTotalResult());
+		} catch (Exception e) {
+			LOGGER.error(e.toString(), e);
+			result.error(e);
+		}
+		return result;
+	}	
+}

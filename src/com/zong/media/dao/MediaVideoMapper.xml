@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zong.media.dao.MediaVideoMapper" >
+  <resultMap id="BaseResultMap" type="com.zong.media.bean.MediaVideo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="cover" property="cover" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="length" property="length" jdbcType="INTEGER" />
+    <result column="size" property="size" jdbcType="INTEGER" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="star" property="star" jdbcType="INTEGER" />
+    <result column="tags" property="tags" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,
+    md5,
+    title,
+    cover,
+    url,
+    remark,
+    length,
+    size,
+    width,
+    height,
+    create_time,
+    update_time,
+    star,
+    tags
+  </sql>
+  
+  <!-- 根据对象主键查询 -->
+  <select id="load" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from media_video
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </select>
+  
+  <!-- 根据条件分页查询 -->
+  <select id="findMediaVideoPage" resultMap="BaseResultMap" >
+    select * from media_video where 1 = 1
+    <if test='pd.keyword != null and pd.keyword != ""'>
+    	and title like concat(concat('%', #{pd.keyword}),'%')
+    </if>
+  </select>
+  
+  <!-- 根据条件查询全部 -->
+  <select id="findMediaVideo" resultMap="BaseResultMap" >
+    select * from media_video where 1 = 1
+    <if test='keyword != null and keyword != ""'>
+    </if>
+  </select>
+  
+  <!-- 根据对象主键删除 -->
+  <delete id="delete" >
+    delete from media_video
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </delete>
+  
+  <!-- 插入对象全部属性的字段 -->
+  <insert id="insert" parameterType="com.zong.media.bean.MediaVideo" >
+    insert into media_video (<include refid="Base_Column_List" />)
+    values( 
+    	#{id,jdbcType=VARCHAR},
+    	#{md5,jdbcType=VARCHAR},
+    	#{title,jdbcType=VARCHAR},
+    	#{cover,jdbcType=VARCHAR},
+    	#{url,jdbcType=VARCHAR},
+    	#{remark,jdbcType=VARCHAR},
+    	#{length,jdbcType=INTEGER},
+    	#{size,jdbcType=INTEGER},
+    	#{width,jdbcType=INTEGER},
+    	#{height,jdbcType=INTEGER},
+    	#{createTime,jdbcType=TIMESTAMP},
+    	#{updateTime,jdbcType=TIMESTAMP},
+    	#{star,jdbcType=INTEGER},
+    	#{tags,jdbcType=VARCHAR}
+  	)
+  </insert>
+  
+  <!-- 根据主键更新对象不为空属性的字段 -->
+  <update id="update" parameterType="com.zong.media.bean.MediaVideo" >
+    update media_video
+    <set>
+      	<if test="md5 != null" >
+        	md5 = #{md5,jdbcType=VARCHAR},
+      	</if>
+      	<if test="title != null" >
+        	title = #{title,jdbcType=VARCHAR},
+      	</if>
+      	<if test="cover != null" >
+        	cover = #{cover,jdbcType=VARCHAR},
+      	</if>
+      	<if test="url != null" >
+        	url = #{url,jdbcType=VARCHAR},
+      	</if>
+      	<if test="remark != null" >
+        	remark = #{remark,jdbcType=VARCHAR},
+      	</if>
+      	<if test="length != null" >
+        	length = #{length,jdbcType=INTEGER},
+      	</if>
+      	<if test="size != null" >
+        	size = #{size,jdbcType=INTEGER},
+      	</if>
+      	<if test="width != null" >
+        	width = #{width,jdbcType=INTEGER},
+      	</if>
+      	<if test="height != null" >
+        	height = #{height,jdbcType=INTEGER},
+      	</if>
+      	<if test="createTime != null" >
+        	create_time = #{createTime,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="updateTime != null" >
+        	update_time = #{updateTime,jdbcType=TIMESTAMP},
+      	</if>
+      	<if test="star != null" >
+        	star = #{star,jdbcType=INTEGER},
+      	</if>
+      	<if test="tags != null" >
+        	tags = #{tags,jdbcType=VARCHAR},
+      	</if>
+    </set>
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </update>
+</mapper>

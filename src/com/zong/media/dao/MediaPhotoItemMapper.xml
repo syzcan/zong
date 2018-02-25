@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zong.media.dao.MediaPhotoItemMapper" >
+  <resultMap id="BaseResultMap" type="com.zong.media.bean.MediaPhotoItem" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,
+    pid,
+    name,
+    url,
+    remark,
+    create_time
+  </sql>
+  
+  <!-- 根据对象主键查询 -->
+  <select id="load" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from media_photo_item
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </select>
+  
+  <!-- 根据条件分页查询 -->
+  <select id="findMediaPhotoItemPage" resultMap="BaseResultMap" >
+    select * from media_photo_item where 1 = 1
+    <if test='pd.pid != null and pd.pid != ""'>
+    	and pid = #{pd.pid}
+    </if>
+    order by create_time desc
+  </select>
+  
+  <!-- 根据条件查询全部 -->
+  <select id="findMediaPhotoItem" resultMap="BaseResultMap" >
+    select * from media_photo_item where 1 = 1
+    <if test='keyword != null and keyword != ""'>
+    </if>
+    order by create_time desc
+  </select>
+  
+  <!-- 根据对象主键删除 -->
+  <delete id="delete" >
+    delete from media_photo_item
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </delete>
+  
+  <!-- 插入对象全部属性的字段 -->
+  <insert id="insert" parameterType="com.zong.media.bean.MediaPhotoItem" >
+    insert into media_photo_item (<include refid="Base_Column_List" />)
+    values( 
+    	#{id,jdbcType=VARCHAR},
+    	#{pid,jdbcType=VARCHAR},
+    	#{name,jdbcType=VARCHAR},
+    	#{url,jdbcType=VARCHAR},
+    	#{remark,jdbcType=VARCHAR},
+    	#{createTime,jdbcType=TIMESTAMP}
+  	)
+  </insert>
+  
+  <!-- 根据主键更新对象不为空属性的字段 -->
+  <update id="update" parameterType="com.zong.media.bean.MediaPhotoItem" >
+    update media_photo_item
+    <set>
+      	<if test="pid != null" >
+        	pid = #{pid,jdbcType=VARCHAR},
+      	</if>
+      	<if test="name != null" >
+        	name = #{name,jdbcType=VARCHAR},
+      	</if>
+      	<if test="url != null" >
+        	url = #{url,jdbcType=VARCHAR},
+      	</if>
+      	<if test="remark != null" >
+        	remark = #{remark,jdbcType=VARCHAR},
+      	</if>
+      	<if test="createTime != null" >
+        	create_time = #{createTime,jdbcType=TIMESTAMP},
+      	</if>
+    </set>
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </update>
+</mapper>

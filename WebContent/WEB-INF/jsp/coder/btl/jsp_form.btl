@@ -1,0 +1,18 @@
+\<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<form id="form" method="post">
+	<input type="hidden" name="${primary.field}" />
+	<table class="table-form">
+		<% for(columnField in normalColumns){%>
+		<tr>
+			<td align="right"><%if(!isEmpty(columnField.remark) && columnField.remark!=""){%>${columnField.remark}<%}else{%>${columnField.field}<%}%>：</td>
+			<td>
+			<%if(columnField.dataType=="text"){%>
+				<textarea name="${columnField.field}" class="easyui-textbox" data-options="<%if(columnField.canNull=='NO'){%>required:true,<%}%>multiline:true" style="width:300px;height:60px;"></textarea>
+			<%}else{%>
+				<input name="${columnField.field}" class="<%if(columnField.jdbcType=="TIMESTAMP"){%>easyui-datebox<%}else if(columnField.jdbcType=="INTEGER"||columnField.jdbcType=="DECIMAL"){%>easyui-numberbox<%}else{%>easyui-textbox<%}%>" data-options="<%if(columnField.canNull=='NO'){%>required:true<%}%>" />
+			<%}%>
+			</td>
+		</tr>
+		<%}%>
+	</table>
+</form>

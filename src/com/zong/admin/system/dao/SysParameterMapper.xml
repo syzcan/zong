@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zong.admin.system.dao.SysParameterMapper" >
+  <resultMap id="BaseResultMap" type="com.zong.admin.system.bean.SysParameter" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="param_key" property="paramKey" jdbcType="VARCHAR" />
+    <result column="param_value" property="paramValue" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,
+    name,
+    param_key,
+    param_value,
+    remark,
+    create_time
+  </sql>
+  
+  <!-- 根据对象主键查询 -->
+  <select id="load" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_parameter
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </select>
+  
+  <!-- 根据条件分页查询 -->
+  <select id="findSysParameterPage" resultMap="BaseResultMap" >
+    select * from sys_parameter where 1 = 1
+    <if test='pd.keyword != null and pd.keyword != ""'>
+    and (name like concat('%', #{pd.keyword},'%') or param_key like concat('%', #{pd.keyword},'%'))
+    </if>
+    <if test='pd.sort=="createTime"'>
+    order by create_time ${pd.order}
+    </if>
+  </select>
+  
+  <!-- 根据对象主键删除 -->
+  <delete id="delete" >
+    delete from sys_parameter
+    where
+    id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <!-- 插入对象全部属性的字段 -->
+  <insert id="insert" parameterType="com.zong.admin.system.bean.SysParameter" >
+    insert into sys_parameter (<include refid="Base_Column_List" />)
+    values( 
+    	#{id,jdbcType=VARCHAR},
+    	#{name,jdbcType=VARCHAR},
+    	#{paramKey,jdbcType=VARCHAR},
+    	#{paramValue,jdbcType=VARCHAR},
+    	#{remark,jdbcType=VARCHAR},
+    	#{createTime,jdbcType=TIMESTAMP}
+  	)
+  </insert>
+  
+  <!-- 根据主键更新对象不为空属性的字段 -->
+  <update id="update" parameterType="com.zong.admin.system.bean.SysParameter" >
+    update sys_parameter
+    <set>
+      	<if test="name != null" >
+        	name = #{name,jdbcType=VARCHAR},
+      	</if>
+      	<if test="paramKey != null" >
+        	param_key = #{paramKey,jdbcType=VARCHAR},
+      	</if>
+      	<if test="paramValue != null" >
+        	param_value = #{paramValue,jdbcType=VARCHAR},
+      	</if>
+      	<if test="remark != null" >
+        	remark = #{remark,jdbcType=VARCHAR},
+      	</if>
+      	<if test="createTime != null" >
+        	create_time = #{createTime,jdbcType=TIMESTAMP}
+      	</if>
+    </set>
+    where
+    id = #{id,jdbcType=VARCHAR} 
+  </update>
+</mapper>
