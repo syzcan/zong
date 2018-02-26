@@ -65,6 +65,7 @@ public class CrawRuleController extends BaseController {
 			saveStoreTable(data);
 			data.put("list_ext", data.getStringJson("list_ext"));
 			data.put("content_ext", data.getStringJson("content_ext"));
+			data.remove("id");
 			crawService.add(JsoupUtil.CRAW_RULE_TABLE, data);
 		} catch (Exception e) {
 			LOGGER.error(e.toString(), e);

@@ -34,12 +34,12 @@ function startDown(){
 	}
 	$('#msg').html('等待:'+$('#dataList span.bg-green').size());
 	var $cur = $('#dataList span.bg-green').first().removeClass('bg-green').addClass('bg-yellow').text('正在解析..');
-	$.get('${ctx}/craw/rule/data.json?id=${param.rule_id}').done(function(data){
+	$.get('${ctx}/craw/rule/data.json?id=${param.rule_id}').done(function(result){
 		var rule = {};
 		rule.js_enabled = '${param.js_enabled}';
 		rule.craw_url = $cur.attr('data-url');
 		rule.craw_store = '${param.craw_store}';
-		$.each(data.rule.content_ext, function(i, n) {
+		$.each(result.data.content_ext, function(i, n) {
 			rule[n.rule_ext_name] = n.rule_ext_css + ";"
 					+ n.rule_ext_type + "["+ n.rule_ext_reg + "];" + n.rule_ext_attr + ";" + n.rule_ext_mode;
 		});

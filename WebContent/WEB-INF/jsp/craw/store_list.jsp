@@ -50,7 +50,7 @@
                 	var img = '';
                 	for(key in row){
                 		if(/.*(gif|png|jpg)$/.test(row[key])){
-                			img = '<img width="120" src="'+row[key]+'">';
+                			img = '<img width="120" src="'+row[key]+'"><br>';
                 			break;
                 		}
                 	}

@@ -20,7 +20,9 @@
 		</c:if>
 		<c:if test="${formType=='edit' }">
 		<tr>
-			<td align="right">存储表</td>
+			<td align="right">存储表
+			<input type="hidden" name="craw_store">
+			</td>
 			<td data-field="craw_store">
 			</td>
 		</tr>
@@ -39,14 +41,14 @@
 		</tr>
 		<tr>
 			<td align="right" valign="top">列表规则</td>
-			<td id="td_list_ext">
+			<td data-dg="#dg_list_ext">
 				<input type="hidden" id="list_ext" name="list_ext" />
 				<table id="dg_list_ext"></table>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" valign="top">内容规则</td>
-			<td id="td_content_ext">
+			<td data-dg="#dg_content_ext">
 				<input type="hidden" id="content_ext" name="content_ext" />
 				<table id="dg_content_ext"></table>
 			</td>

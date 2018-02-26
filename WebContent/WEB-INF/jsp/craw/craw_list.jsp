@@ -44,18 +44,18 @@
 		}
 		layer.load(1,{shade: 0});
 		$.get('${ctx}/craw/rule/data.json?id=' + $('select').val()).done(
-				function(data) {
+				function(result) {
 					var rule = {};
 					rule.js_enabled = $('#js_enabled').val();
 					rule.craw_url = craw_url;
-					rule.craw_item = data.rule.craw_item;
-					rule.craw_next = data.rule.craw_next;
-					rule.craw_store = data.rule.craw_store;
-					$.each(data.rule.list_ext, function(i, n) {
+					rule.craw_item = result.data.craw_item;
+					rule.craw_next = result.data.craw_next;
+					rule.craw_store = result.data.craw_store;
+					$.each(result.data.list_ext, function(i, n) {
 						rule[n.rule_ext_name] = n.rule_ext_css + ";"
 								+ n.rule_ext_type + "["+ n.rule_ext_reg + "];" + n.rule_ext_attr + ";" + n.rule_ext_mode;
 					});
-					$.each(data.rule.content_ext, function(i, n) {
+					$.each(result.data.content_ext, function(i, n) {
 						rule[n.rule_ext_name] = n.rule_ext_css + ";"
 								+ n.rule_ext_type + "["+ n.rule_ext_reg + "];" + n.rule_ext_attr + ";" + n.rule_ext_mode;
 					});

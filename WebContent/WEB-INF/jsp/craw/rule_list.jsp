@@ -38,9 +38,9 @@
         });
         // 规则列表的表单项
         var columns = [
-	 		{field:'rule_ext_name',title:'字段名英文',width:100,editor:'text'},
+	 		{field:'rule_ext_name',title:'字段名英文',width:100,editor:{type:'text', options:{required:true}}},
 	 		{field:'rule_ext_css',title:'cssQuery',width:180,editor:'text'},
-	 		{field:'rule_ext_type',title:'内容类型',width:68,editor:{
+	 		{field:'rule_ext_type',title:'内容类型',width:65,editor:{
 	 			type:'combobox',
 	 			options:{
 	 				valueField: 'v',
@@ -68,11 +68,11 @@
 	 			}
 	 		}},
 	 		{field:'rule_ext_desc',title:'字段描述',width:100,editor:'text'},
-	 		{field:'operate',title:'<span class="fa fa-plus text-green"></span>',width:20,formatter:function(v,row){
+	 		{field:'operate',title:'<span class="fa fa-plus-circle text-green"></span>',width:20,formatter:function(v,row){
 	 			if(row.rule_ext_name=='title' || row.rule_ext_name == 'url' || row.rule_ext_name == 'content'){
 	 				return;
 	 			}
-	 			return '<span class="fa fa-minus text-red" data-name="'+row.rule_ext_name+'"></span>';
+	 			return '<span class="fa fa-minus-circle text-red"></span>';
 	 		}},
 		];
         // 新增数据
@@ -88,36 +88,26 @@
 					columns:[columns],
 					data: [],
 					onLoadSuccess: function(){
+						// 新增自动添加必须的title和url
 						$(this).datagrid('appendRow',{rule_ext_name: 'title', rule_ext_type: 'text', rule_ext_desc: '标题', rule_ext_mode: 'string'}); 
 						$(this).datagrid('appendRow',{rule_ext_name: 'url', rule_ext_type: 'text', rule_ext_desc: '详情地址', rule_ext_mode: 'string'}); 
-						$(this).datagrid('beginEdit', 0);
-						$(this).datagrid('beginEdit', 1);
+						editRow($(this).datagrid('getRows')[0], $(this));
+						editRow($(this).datagrid('getRows')[1], $(this));
 					},
-					onDblClickCell: function(index,field,value){
-						$(this).datagrid('beginEdit', index);
-						var ed = $(this).datagrid('getEditor', {index:index,field:field});
-						if(field=='rule_ext_name'&&(value=='title' || value == 'url')){
-							$(ed.target).attr('readonly','readonly');
-			 			}else{
-							$(ed.target).focus();
-			 			}
+					onClickRow: function(index,row){
+						editRow(row, $(this));
 					}
 				});
 				$('#dg_content_ext').datagrid({
 					columns:[columns],
 					data: [],
 					onLoadSuccess: function(){
+						// 新增自动添加必须的content
 						$(this).datagrid('appendRow',{rule_ext_name: 'content', rule_ext_type: 'text', rule_ext_desc: '详情内容', rule_ext_mode: 'string'}); 
-						$(this).datagrid('beginEdit', 0);
+						editRow($(this).datagrid('getRows')[0], $(this));
 					},
-					onDblClickCell: function(index,field,value){
-						$(this).datagrid('beginEdit', index);
-						var ed = $(this).datagrid('getEditor', {index:index,field:field});
-						if(field=='rule_ext_name'&&value == 'content'){
-							$(ed.target).attr('readonly','readonly');
-			 			}else{
-							$(ed.target).focus();
-			 			}
+					onClickRow: function(index,row){
+						editRow(row, $(this));
 					}
 				});
 			},
@@ -141,27 +131,15 @@
 				$('#dg_list_ext').datagrid({
 					columns:[columns],
 					data: data.list_ext,
-					onDblClickCell: function(index,field,value){
-						$(this).datagrid('beginEdit', index);
-						var ed = $(this).datagrid('getEditor', {index:index,field:field});
-						if(field=='rule_ext_name'&&(value=='title' || value == 'url')){
-							$(ed.target).attr('readonly','readonly');
-			 			}else{
-							$(ed.target).focus();
-			 			}
+					onClickRow: function(index,row){
+						editRow(row, $(this));
 					}
 				});
 				$('#dg_content_ext').datagrid({
 					columns:[columns],
 					data: data.content_ext,
-					onDblClickCell: function(index,field,value){
-						$(this).datagrid('beginEdit', index);
-						var ed = $(this).datagrid('getEditor', {index:index,field:field});
-						if(field=='rule_ext_name'&&value == 'content'){
-							$(ed.target).attr('readonly','readonly');
-			 			}else{
-							$(ed.target).focus();
-			 			}
+					onClickRow: function(index,row){
+						editRow(row, $(this));
 					}
 				});
 			},
@@ -170,6 +148,15 @@
 				return true;
 			}
 		});
+        function editRow(row, $obj){
+        	var col = $obj.datagrid('getColumnOption', 'rule_ext_name');
+			col.editor1 = col.editor;
+			if(row.rule_ext_name == 'title' || row.rule_ext_name == 'url' || row.rule_ext_name == 'content'){
+				col.editor = null;
+			}
+			$obj.datagrid('beginEdit', $obj.datagrid('getRowIndex',row));
+			col.editor = col.editor1;
+        }
         // 提交表单前序列化列表和内容规则为字符串，赋值到隐藏域
         function serializeExt(){
         	$.each($('#dg_list_ext').datagrid('getRows'),function(i){
@@ -183,14 +170,21 @@
 			$('#list_ext').val(list_ext);
 			$('#content_ext').val(content_ext);
         }
-        function addRule(dg){console.log(dg);
+        // 添加规则项
+        $(document).on('click','td[data-dg] .fa-plus-circle',function(){
+        	var dg = $(this).parents('td[data-dg]').data('dg');
         	$(dg).datagrid('appendRow',{rule_ext_type: 'text', rule_ext_mode: 'string'});
-        }
-        $(document).on('click','#td_list_ext .fa-plus',function(){
-			addRule('#dg_list_ext');
+        	$(dg).datagrid('beginEdit',$(dg).datagrid('getRows').length - 1);
+        	$(dg).datagrid('resize');
 		});
-        $(document).on('click','#td_content_ext .fa-plus',function(){
-			addRule('#dg_content_ext');
+        // 删除规则项
+        $(document).on('click','td[data-dg] .fa-minus-circle',function(event){
+        	var dg = $(this).parents('td[data-dg]').data('dg');
+        	var i = $(this).parents('tr.datagrid-row').attr('datagrid-row-index');
+        	console.log(i);
+        	$(dg).datagrid('deleteRow',i);
+        	$(dg).datagrid('resize');
+        	event.stopPropagation();
 		});
         // 删除选中数据
         $('#del').zbutton({
