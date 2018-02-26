@@ -39,14 +39,14 @@
 		</tr>
 		<tr>
 			<td align="right" valign="top">列表规则</td>
-			<td>
+			<td id="td_list_ext">
 				<input type="hidden" id="list_ext" name="list_ext" />
 				<table id="dg_list_ext"></table>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" valign="top">内容规则</td>
-			<td>
+			<td id="td_content_ext">
 				<input type="hidden" id="content_ext" name="content_ext" />
 				<table id="dg_content_ext"></table>
 			</td>

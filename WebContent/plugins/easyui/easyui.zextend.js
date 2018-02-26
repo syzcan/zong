@@ -52,6 +52,10 @@
 			maximizable : options.maximizable,
 			resizable : options.resizable,
 			onLoad : function() {
+				// 自定义方法调用onLoadHead
+				if (options.onLoadHead) {
+					options.onLoadHead();
+				}
 				// 如果有详情json链接，加载进表单
 				if (options.dataurl) {
 					var arr = options.href.split('?');
