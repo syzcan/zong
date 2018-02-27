@@ -1,105 +1,99 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@ include file="/WEB-INF/jsp/common/style_pintuer.jsp"%>
-<div class="padding-big">
-	<div class="margin-bottom">
-		<select id="list-rule" class="input input-auto">
-			<option value="">--爬取规则--</option>
-			<c:forEach items="${rules }" var="rule">
-				<option data-url="${rule.craw_url }" value="${rule.id }">${rule.name }</option>
-			</c:forEach>
-		</select> 
-		<select id="js_enabled" class="input input-auto">
-			<option value="">禁用JS解释器</option>
-			<option value="1">启用JS解释器</option>
-		</select> 
-		<input type="text" placeholder="爬取列表地址" class="input input-auto"
-			name="craw_url" data-next="" size="50" />
-		<button class="button bg-green" type="button" onclick="craw()">解析</button>
-		<button class="button bg-blue" type="button" onclick="next()">下一页</button>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<title>月光边境</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<%@ include file="/WEB-INF/jsp/common/style_easyui.jsp"%>
+<style>
+.validatebox-readonly {
+	background: none;
+}
+</style>
+<body class="easyui-layout" data-options="fit:true">
+	<!-- 工具栏 -->
+	<div id="toolbar" class="easyui-toolbar datagrid-toolbar">
+		<form id="form">
+			<select id="list-rule" class="easyui-combobox"
+				data-options="required:true,editable:false,
+			    onSelect:function(row){
+			    	current_rule = null;
+			    	$(this).val(row.value);
+			    	$('#craw_url').textbox('setValue',$(this).find('option:selected').data('url'));
+			    }">
+				<c:forEach items="${rules }" var="rule">
+					<option data-url="${rule.craw_url }" value="${rule.id }">${rule.name }</option>
+				</c:forEach>
+			</select> 
+			<select id="js_enabled" class="easyui-combobox"
+				data-options="editable:false">
+				<option value="">禁用JS解释器</option>
+				<option value="1">启用JS解释器</option>
+			</select> 
+			<input
+				data-options="prompt:'爬取列表地址',required:true,validType:'url',width:400"
+				class="easyui-textbox" id="craw_url" /> 
+			<a class="easyui-linkbutton btn-green" data-options="iconCls:'fa fa-send'" onclick="craw()">解析</a>
+		</form>
 	</div>
-	<table class="table text-default table-condensed">
-		<thead>
-			<tr>
-				<th width="50">序号</th>
-				<th width="300">title</th>
-				<th>url</th>
-			</tr>
-		</thead>
-		<tbody>
-
-		</tbody>
-	</table>
-</div>
-<script>
-	function craw() {
-		var craw_url = $.trim($('input[name="craw_url"]').val());
-		if (craw_url == '') {
-			layer.msg('请填写抓取地址');
-			return;
-		}
-		if ($('#list-rule').val() == '') {
-			layer.msg('请选择爬取规则');
-			return;
-		}
-		layer.load(1,{shade: 0});
-		$.get('${ctx}/craw/rule/data.json?id=' + $('select').val()).done(
-				function(result) {
-					var rule = {};
-					rule.js_enabled = $('#js_enabled').val();
-					rule.craw_url = craw_url;
-					rule.craw_item = result.data.craw_item;
-					rule.craw_next = result.data.craw_next;
-					rule.craw_store = result.data.craw_store;
-					$.each(result.data.list_ext, function(i, n) {
-						rule[n.rule_ext_name] = n.rule_ext_css + ";"
-								+ n.rule_ext_type + "["+ n.rule_ext_reg + "];" + n.rule_ext_attr + ";" + n.rule_ext_mode;
-					});
-					$.each(result.data.content_ext, function(i, n) {
-						rule[n.rule_ext_name] = n.rule_ext_css + ";"
-								+ n.rule_ext_type + "["+ n.rule_ext_reg + "];" + n.rule_ext_attr + ";" + n.rule_ext_mode;
-					});
-					$.post('${ctx}/craw/crawList.json', rule).done(
-							function(data) {
-								$('tbody').html('');
-								if(data.statusCode==200){
-									$.each(data.craw.data, function(i, n) {
-										$('tbody').append(
-												'<tr><td>'+(i+1)+'</td><td>' + n.title + '</td><td><a target="_blank" href="'
-														+ n.url + '">'+n.url+'</a></td></tr>');
-									});
-									if (data.craw.craw_next != null) {
-										$('input[name="craw_url"]').attr('data-next', data.craw.craw_next);
-									}
-								}
-								if($('tbody').html()==''){
-									$('tbody').html('<tr><td>没有数据</td></tr>');
-								}
-								layer.close(layer.index);
-								next();
-							});
+	<!-- 数据网格 -->
+	<table id="dg" data-options="toolbar:'#toolbar'"></table>
+	<script>
+		var current_rule = null;
+		function craw() {
+			if (!$('#form').form('validate')) {
+				return;
+			}
+			layer.load(1);
+			if (current_rule == null) {
+				$.ajax({
+					url : '${ctx}/craw/rule/data.json?id=' + $('#list-rule').combobox('getValue'),
+					dataType : 'json',
+					async : false,
+					success : function(result) {
+						current_rule = result.data;
+					}
 				});
-	}
-	function next() {
-		if ($('tbody tr').size() == 0) {
-			layer.msg('请先解析');
-			return;
+			}
+			var rule = {
+				js_enabled : $('#js_enabled').combobox('getValue'),
+				craw_url : $('#craw_url').textbox('getValue'),
+				craw_item : current_rule.craw_item,
+				craw_next : current_rule.craw_next
+			};
+			//rule.craw_store = current_rule.craw_store;
+			$.each(current_rule.list_ext.concat(current_rule.content_ext), function(i, n) {
+				rule[n.rule_ext_name] = n.rule_ext_css + ";" + n.rule_ext_type + "[" + n.rule_ext_reg + "];" + n.rule_ext_attr + ";"
+						+ n.rule_ext_mode;
+			});
+			$.post('${ctx}/craw/crawList.json', rule, function(result) {
+				if (result.statusCode == 200) {
+					$('#dg').zdatagrid({
+						columns : [ [ {
+							field : 'title',
+							title : 'title'
+						}, {
+							field : 'url',
+							title : 'url'
+						} ] ],
+						data : result.craw.data,
+						pagination : false
+					});
+					if (result.craw.craw_next != null) {
+						$('#craw_url').data('next', result.craw.craw_next);
+					}
+				}
+				layer.close(layer.index);
+				if ($('#craw_url').data('next') == '') {
+					$.messager.alert('提示', '没有下一页', 'warning');
+					return;
+				}
+				$('#craw_url').textbox('setValue', $('#craw_url').data('next'));
+				// 更新下一页地址，继续爬取
+				craw();
+			});
 		}
-		if ($('tbody').html().indexOf('没有数据') > -1) {
-			layer.msg('没有数据');
-			return;
-		}
-		if ($('input[name="craw_url"]').attr('data-next') == '') {
-			layer.msg('没有下一页');
-			return;
-		}
-		$('input[name="craw_url"]').val($('input[name="craw_url"]').attr('data-next'));
-		craw();
-	}
-	$('#list-rule').change(function(){
-		if($.trim($('input[name="craw_url"]').val())==''){
-			$('input[name="craw_url"]').val($(this).find('option:selected').attr('data-url'));
-			$('input[name="craw_url"]').attr('data-next','');
-		}
-	});
-</script>
+	</script>
+</body>
+</html>

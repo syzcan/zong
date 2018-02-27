@@ -5,6 +5,9 @@
 <title>月光边境</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@ include file="/WEB-INF/jsp/common/style_easyui.jsp"%>
+<link rel="stylesheet" href="${ctx }/plugins/SyntaxHighlighter/shCoreDefault.css">
+<script type="text/javascript" src="${ctx }/plugins/SyntaxHighlighter/shCore.js"></script>
+<script type="text/javascript" src="${ctx }/plugins/jquery/json-format.js"></script>
 <style>.validatebox-readonly{background: none;}</style>
 <body>
 <!-- 工具栏 -->
@@ -19,6 +22,12 @@
 <div style="display: none">
 	<div id="dialog" data-options="buttons:'#btns'"></div>
 	<div id="btns">
+		<select class="easyui-combobox" data-options="width:60,editable:false" id="test_type">
+        	<option value="list">列表</option>
+        	<option value="content">内容</option>
+        </select>
+		<input class="easyui-textbox easyui-validatebox" data-options="prompt:'列表或详情页地址',width:350,validType:'url'" id="test_text" />
+		<a class="easyui-linkbutton btn-blue" data-options="iconCls:'fa fa-send'" id="test_bt">测试</a>
 		<a class="easyui-linkbutton btn-green" data-options="iconCls:'fa fa-save'" onclick="$('#form').submit()">保存</a>
     	<a class="easyui-linkbutton btn-red" data-options="iconCls:'fa fa-close'" onclick="$('#dialog').dialog('close')">关闭</a>
 	</div>
@@ -143,6 +152,7 @@
 						editRow(row, $(this), 'edit');
 					}
 				});
+				$('#test_text').textbox('setValue','');
 			},
 			onSubmit: function(){
 				// 校验表单
@@ -186,7 +196,6 @@
         $(document).on('click','td[data-dg] .fa-minus-circle',function(event){
         	var dg = $(this).parents('td[data-dg]').data('dg');
         	var i = $(this).parents('tr.datagrid-row').attr('datagrid-row-index');
-        	console.log(i);
         	$(dg).datagrid('deleteRow',i);
         	$(dg).datagrid('resize');
         	event.stopPropagation();
@@ -217,12 +226,55 @@
             			});
             			return count;
         			}
-        			return countName('#dg_list_ext')+countName('#dg_content_ext')==0;
+        			return countName('#dg_list_ext')+countName('#dg_content_ext')<=1;
         		},
         		message: '已存在'
             }
         });
-        
+        // 测试规则
+        $('#test_bt').click(function(){
+        	var url = $('#test_text').textbox('getValue');
+        	if(url==''){
+        		$('#test_text').textbox('textbox').focus();
+        		return;
+        	}
+        	if(!$('#test_text').validatebox('isValid')){
+        		$('#test_text').textbox('textbox').focus();
+        		return;
+        	}
+        	if(!$('#form').form('validate')){
+        		return;
+			}
+        	var data = {craw_url:url,craw_item:$('#craw_item').textbox('getValue'),craw_next:$('#craw_next').textbox('getValue')};
+        	if($('#test_type').combobox('getValue')=='list'){
+	        	$.each($('#dg_list_ext').datagrid('getRows'),function(i, row){
+	        		data[row.rule_ext_name] = row.rule_ext_css + ";"
+					+ row.rule_ext_type + "["+ row.rule_ext_reg + "];" + row.rule_ext_attr + ";" + row.rule_ext_mode;
+	        	});
+	        	$.post('${ctx}/craw/crawList.json',data,function(result){
+	        		code('列表信息:'+url,result);
+	        	});
+        	}else{
+	        	$.each($('#dg_content_ext').datagrid('getRows'),function(i, row){
+	        		data[row.rule_ext_name] = row.rule_ext_css + ";"
+					+ row.rule_ext_type + "["+ row.rule_ext_reg + "];" + row.rule_ext_attr + ";" + row.rule_ext_mode;
+	        	});
+	        	$.post('${ctx}/craw/data.json',data,function(result){
+	        		code('内容信息:'+url,result);
+	        	});
+        	}
+        	function code(title,result){
+        		code = JSON.stringify(result, null, 2);
+    			code = code.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    			$('#preview').html('<pre class="brush:java;toolbar:false;quick-code:false">'+code+'</pre>');
+    			SyntaxHighlighter.highlight();
+        		$('#dialog_result').dialog({title:title,width:'100%',height:'100%',modal:true});
+        	}
+        });
 </script>
+<div id="dialog_result">
+<div id="preview">
+		</div>
+</div>
 </body>
 </html>

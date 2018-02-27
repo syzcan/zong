@@ -6,6 +6,7 @@ body {
 input,textarea{
 	font-family: "Microsoft YaHei", "simsun", "Helvetica Neue", Arial
 }
+a{text-decoration: none;color: #3c8dbc}
 .table-form{
 	width: 100%;
 	padding: 10px;
@@ -627,7 +628,7 @@ input,textarea{
   display: inline-block;
   vertical-align: top;
   width: auto;
-  line-height: 24px;
+  line-height: 26px;
   font-size: 14px;
   padding: 0;
   margin: 0 4px;
@@ -820,7 +821,8 @@ input,textarea{
   font-size: 14px;
   border: 0;
   margin: 0;
-  padding: 4px;
+  height: 26px;
+  padding: 0px 4px;
   white-space: normal;
   vertical-align: top;
   outline-style: none;

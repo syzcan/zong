@@ -61,6 +61,7 @@ public class CrawController extends BaseController {
 	 * @param craw_store 存储表名，只有指定才保存到数据库
 	 * @param exts 非craw_*关键参数的其他扩展规则
 	 */
+	@SuppressWarnings("unchecked")
 	@ResponseBody
 	@RequestMapping("/crawList")
 	public Result crawList() {
@@ -116,7 +117,14 @@ public class CrawController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/toCrawDetail")
-	public String toCrawDetail(String craw_store, Model model) {
+	public String toCrawDetail(Model model) {
+		return "/craw/craw_detail";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/crawQueue")
+	public Result crawQueue(String craw_store) {
+		Result result = Result.success();
 		List<Result> stores = new ArrayList<Result>();
 		// 先查询队列是否还有数据，没有从数据库取
 		if (JsoupUtil.crawQueue(craw_store).isEmpty()) {
@@ -139,9 +147,8 @@ public class CrawController extends BaseController {
 				stores.add(JsoupUtil.crawQueue(craw_store).remove());
 			}
 		}
-		model.addAttribute("stores", stores);
-		model.addAttribute("total", JsoupUtil.crawQueue(craw_store).size());
-		return "/craw/craw_detail";
+		result.put("rows", stores).put("total", JsoupUtil.crawQueue(craw_store).size());
+		return result;
 	}
 
 	@ResponseBody
@@ -166,47 +173,6 @@ public class CrawController extends BaseController {
 
 	@RequestMapping(value = "/store/list")
 	public String stores(Model model) {
-		try {
-			List<Result> rules = crawService.find(JsoupUtil.CRAW_RULE_TABLE, new PageData());
-			Page page = super.getPage();
-			String keyword = (String) page.getPd().remove("keyword");
-			String craw_store = (String) page.getPd().remove(JsoupUtil.CRAW_STORE_TABLE);
-			if (keyword != null) {
-				page.getPd().put("like", new PageData("title", keyword));
-			}
-			if (craw_store == null) {
-				if (!rules.isEmpty()) {
-					String table = rules.get(0).getString(JsoupUtil.CRAW_STORE_TABLE);
-					craw_store = JsoupUtil.storeTable(table);
-					getPageData().put("craw_store", table);
-				} else {
-					craw_store = JsoupUtil.CRAW_STORE_TABLE;
-				}
-			} else {
-				craw_store = JsoupUtil.storeTable(craw_store);
-			}
-			page.setTable(craw_store);
-			List<ColumnField> columnFields = crawService.showTableColumns(craw_store);
-			List<String> list = new ArrayList<String>();
-			for (ColumnField columnField : columnFields) {
-				if (!columnField.getColumn().equals(JsoupUtil.STORE_TABLE_COL_CONTENT)) {
-					list.add(columnField.getColumn());
-				}
-			}
-			String[] columns = list.toArray(new String[list.size()]);
-			page.getPd().put("columns", columns);
-			List<Result> stores = crawService.findPage(page);
-			model.addAttribute("stores", stores);
-			for (Result rule : rules) {
-				rule.put("list_ext", rule.readJsonValues("list_ext"));
-				if (JsoupUtil.storeTable(rule.getString(JsoupUtil.CRAW_STORE_TABLE)).equals(craw_store)) {
-					model.addAttribute("rule", rule);
-				}
-			}
-			model.addAttribute("rules", rules);
-		} catch (Exception e) {
-			LOGGER.error(e.toString(), e);
-		}
 		return "/craw/store_list";
 	}
 

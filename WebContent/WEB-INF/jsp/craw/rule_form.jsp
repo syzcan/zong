@@ -29,15 +29,16 @@
 		</c:if>
 		<tr>
 			<td align="right">样本地址</td>
-			<td><input class="easyui-textbox" name="craw_url" data-options="required:true" size="50" /></td>
+			<td><input class="easyui-textbox" name="craw_url" data-options="required:true,validType:'url'" size="50" /></td>
 		</tr>
 		<tr>
 			<td align="right">条目规则</td>
-			<td><input class="easyui-textbox" name="craw_item" data-options="required:true" size="50" /></td>
+			<td><input class="easyui-textbox" id="craw_item" name="craw_item" data-options="required:true" size="50" /></td>
 		</tr>
 		<tr>
 			<td align="right">下一页规则</td>
-			<td><input class="easyui-textbox" name="craw_next" size="50" /></td>
+			<td><input class="easyui-textbox" id="craw_next" name="craw_next" size="50" />
+			</td>
 		</tr>
 		<tr>
 			<td align="right" valign="top">列表规则</td>
