@@ -5,6 +5,7 @@
 <title>月光边境</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@ include file="/WEB-INF/jsp/common/style_easyui.jsp"%>
+<style>.validatebox-readonly{background: none;}</style>
 <body>
 <!-- 工具栏 -->
 <div id="toolbar" class="easyui-toolbar">
@@ -38,15 +39,15 @@
         });
         // 规则列表的表单项
         var columns = [
-	 		{field:'rule_ext_name',title:'字段名英文',width:100,editor:{type:'text', options:{required:true}}},
-	 		{field:'rule_ext_css',title:'cssQuery',width:180,editor:'text'},
+	 		{field:'rule_ext_name',title:'字段名英文',width:100,editor:{type:'textbox', options:{required:true,validType:'rule_ext_name'}}},
+	 		{field:'rule_ext_css',title:'cssQuery',width:180,editor:'textbox', options:{required:true}},
 	 		{field:'rule_ext_type',title:'内容类型',width:65,editor:{
 	 			type:'combobox',
 	 			options:{
 	 				valueField: 'v',
 	 				textField: 'v',
 	 				data:[{v:'text'},{v:'html'},{v:'attr'}],
-	 				editable: false
+	 				editable: false,
 	 			}
 	 		}},
 	 		{field:'rule_ext_attr',title:'属性attr',width:90,editor:{
@@ -57,7 +58,7 @@
 	 				data:[{v:'href'},{v:'src'},{v:'title'},{v:'value'},{v:'alt'},{v:'data-src'},{v:'content'}]
 	 			}
 	 		}},
-	 		{field:'rule_ext_reg',title:'过滤正则',width:120,editor:'text'},
+	 		{field:'rule_ext_reg',title:'过滤正则',width:120,editor:'textbox'},
 	 		{field:'rule_ext_mode',title:'模式',width:70,editor:{
 	 			type:'combobox',
 	 			options:{
@@ -67,7 +68,7 @@
 	 				editable: false
 	 			}
 	 		}},
-	 		{field:'rule_ext_desc',title:'字段描述',width:100,editor:'text'},
+	 		{field:'rule_ext_desc',title:'字段描述',width:100,editor:'textbox'},
 	 		{field:'operate',title:'<span class="fa fa-plus-circle text-green"></span>',width:20,formatter:function(v,row){
 	 			if(row.rule_ext_name=='title' || row.rule_ext_name == 'url' || row.rule_ext_name == 'content'){
 	 				return;
@@ -132,26 +133,30 @@
 					columns:[columns],
 					data: data.list_ext,
 					onClickRow: function(index,row){
-						editRow(row, $(this));
+						editRow(row, $(this), 'edit');
 					}
 				});
 				$('#dg_content_ext').datagrid({
 					columns:[columns],
 					data: data.content_ext,
 					onClickRow: function(index,row){
-						editRow(row, $(this));
+						editRow(row, $(this), 'edit');
 					}
 				});
 			},
 			onSubmit: function(){
+				// 校验表单
+				if(!$('#form').form('validate')){
+					return false;
+				}
 				serializeExt();
 				return true;
 			}
 		});
-        function editRow(row, $obj){
+        function editRow(row, $obj, type){
         	var col = $obj.datagrid('getColumnOption', 'rule_ext_name');
 			col.editor1 = col.editor;
-			if(row.rule_ext_name == 'title' || row.rule_ext_name == 'url' || row.rule_ext_name == 'content'){
+			if(type || row.rule_ext_name == 'title' || row.rule_ext_name == 'url' || row.rule_ext_name == 'content'){
 				col.editor = null;
 			}
 			$obj.datagrid('beginEdit', $obj.datagrid('getRowIndex',row));
@@ -192,6 +197,32 @@
             posturl: '${ctx}/craw/rule/delete.json',
             pk: 'id'
         });
+        // 校验名称重复
+        $.extend($.fn.validatebox.defaults.rules, {
+            rule_ext_name: {
+        		validator: function(value){
+        			function countName(dg){
+        				var count = 0;
+            			$.each($(dg).datagrid('getRows'),function(i, row){
+            				var ed = $(dg).datagrid('getEditor', {index:i,field:'rule_ext_name'});
+            				if(ed){
+            					if($(ed.target).textbox('getValue') == value){
+                					count++;
+                				}
+            				}else{
+            					if(row.rule_ext_name == value){
+                					count++;
+                				}
+            				}
+            			});
+            			return count;
+        			}
+        			return countName('#dg_list_ext')+countName('#dg_content_ext')==0;
+        		},
+        		message: '已存在'
+            }
+        });
+        
 </script>
 </body>
 </html>
