@@ -35,7 +35,17 @@
             url: '${ctx}/media/video/datas.json',
             columns: [[
                 {field: 'id', title: '主键', hidden: true},
-                {field: 'title', title: '标题'},
+                {field: 'title', title: '标题', formatter: function(value){
+                	var html = '';
+                	if(value){
+                		var i=0;
+	                	while(i<value.length){
+	                		html += value.substring(i,i+10) +'<br>';
+	                		i = i+10;
+	                	}
+                	}
+                	return html;
+        		}},
                 {field: 'cover', title: '封面图', formatter: function(value){
                 	return '<img style="width:120px" src="${ctx}/'+ value +'">';
                 }},
@@ -87,7 +97,11 @@
 		$(document).on('click','.datagrid-btable td[field="title"],.datagrid-btable td[field="cover"]',function(){
 			var index = parseInt($(this).parent().attr('datagrid-row-index'));
 			var row = $("#dg").datagrid('getRows')[index];
-			openVideo(row.title,ctx+'/media/video/show?id='+row.id);
+			parent.addTab({
+				title:row.title.length>6?row.title.substr(0,6):row.title,
+				url:ctx+'/media/video/show?id='+row.id,
+				iconCls:'fa fa-video-camera'
+			});
 		});
 </script>
 </body>

@@ -115,7 +115,7 @@
 				return $(options.form).form('validate');
 			},
 			success : function(result) {
-				result(options, eval('(' + result + ')'));
+				showResult(options, eval('(' + result + ')'));
 			}
 		});
 		// 渲染umeditor
@@ -166,7 +166,7 @@
 					dataType : 'json',
 					data : data,
 					success : function(result) {
-						result(options, result);
+						showResult(options, result);
 					}
 				});
 			}
@@ -305,7 +305,7 @@
 	}
 
 	// 请求响应信息提示
-	function result(options, result, fn) {
+	function showResult(options, result, fn) {
 		if (result.retCode == 200) {
 			$.messager.show({
 				title : '提示',

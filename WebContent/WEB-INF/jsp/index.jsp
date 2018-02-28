@@ -219,4 +219,5 @@ $(function(){
 	});
 });
 </script>
+<div id="dialog_common"></div>
 </html>
