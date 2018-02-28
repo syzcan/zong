@@ -1,6 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="ctx" value="${pageContext.request.contextPath }" />
 <form id="form" method="post">
     <input type="hidden" name="id" />
     <table class="table-form">
@@ -19,7 +17,7 @@
         <tr>
             <td align="right">上级菜单：</td>
             <td>
-                <input name="pid" class="easyui-combotree" data-options="required:true,url:'${ctx }/system/menu/datas.json?pid=1&id=${param.id}'" />
+                <input name="pid" class="easyui-combotree" data-options="required:true,url:ctx+'/system/menu/datas.json?pid=1&id=${param.id}'" />
             </td>
         </tr>
         <tr>
