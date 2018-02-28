@@ -106,17 +106,17 @@
 				type : 'post',
 				dataType : 'json',
 				data : data,
-				success : function(data) {
-					if (data.statusCode == 200) {
+				success : function(result) {
+					if (result.retCode == 200) {
 						$.messager.show({
-							title : data.title,
-							msg : data.message,
+							title : '提示',
+							msg : '操作成功',
 							timeout : 2000,
 							showType : 'slide'
 						});
 						$("#dg").datagrid('reload');
 					} else {
-						$.messager.alert(data.title, data.message, 'error');
+						$.messager.alert(data.title, result.retMsg, 'error');
 					}
 				}
 			});

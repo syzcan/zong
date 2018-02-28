@@ -139,12 +139,12 @@
         			type:'post',
         			data:rule,
         			dataType:'json',
-        			success:function(data){
+        			success:function(result){
         				layer.closeAll();
-        				if(data.statusCode==200){
+        				if(result.retCode == 200){
         					layer.msg('操作成功');
         				}else{
-        					layer.msg(data.message);
+        					layer.msg(result.retMsg);
         				}
         			}
         		});

@@ -68,7 +68,7 @@
 						+ n.rule_ext_mode;
 			});
 			$.post('${ctx}/craw/crawList.json', rule, function(result) {
-				if (result.statusCode == 200) {
+				if (result.retCode == 200) {
 					$('#dg').zdatagrid({
 						columns : [ [ {
 							field : 'title',

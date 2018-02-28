@@ -85,8 +85,8 @@
 				data : rule,
 				dataType : 'json',
 				timeout : 10000, //超时时间设置，单位毫秒
-				success : function(data) {
-					if (data.statusCode == 200) {
+				success : function(result) {
+					if (result.retCode == 200) {
 						$('span.bg-yellow').removeClass('bg-yellow').addClass('bg-blue').text('已解析');
 					} else {
 						$('span.bg-yellow').removeClass('bg-yellow').addClass('bg-red').text('解析失败！');

@@ -14,7 +14,7 @@
 	uploadType:'picture',
 	multiple:true,
 	success: function(result){
-		if(result.statusCode == 200){
+		if(result.retCode == 200){
 			// 上传成功保存，然后刷新列表
 			$.post(ctx+'/media/photoItem/add.json',{name:result.fileName,url:result.filePath,pid:'${param.id }'},function(result){
 				$('#dg').datagrid('reload');
@@ -79,8 +79,8 @@
 					data['items[' + i + '].remark'] = n.remark;
 				}
 			});
-			$.post(ctx + '/media/photoItem/edit.json', data, function(data){
-				if (data.statusCode == 200) {
+			$.post(ctx + '/media/photoItem/edit.json', data, function(result){
+				if (result.retCode == 200) {
 					$.messager.show({
 						title : '提示',
 						msg : '操作成功',
@@ -89,7 +89,7 @@
 					});
 					$('#dg').datagrid('reload');
 				} else {
-					$.messager.alert('提示', data.message, 'warning');
+					$.messager.alert('提示', result.retMsg, 'warning');
 				}
 			});
 		});

@@ -75,7 +75,7 @@ public class CrawController extends BaseController {
 			LOGGER.error(e.toString(), e);
 			result.error(e);
 			if (e.toString().indexOf("Status=404") > -1) {
-				result.put(Result.MESSAGE, "系统错误：Status=404");
+				result.put(Result.RET_MSG, "系统错误：Status=404");
 			}
 		}
 		return result;

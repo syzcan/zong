@@ -55,14 +55,14 @@ var zutil = function() {
 			data : formJson($form),
 			success : function(data) {
 				layer.close(layer.index);
-				if (data.statusCode == 200) {
+				if (data.retCode == 200) {
 					if (typeof func === "function") {
 						func(data);
 					} else {
 						layer.msg('操作成功');
 					}
 				} else {
-					layer.msg(data.message);
+					layer.msg(data.retMsg);
 				}
 			},
 			error : function() {
@@ -92,14 +92,14 @@ function dealForm(id, url, func) {
 		dataType : 'json',
 		success : function(data) {
 			layer.closeAll();
-			if (data.statusCode == 200) {
+			if (data.retCode == 200) {
 				if (typeof func === "function") {
 					func();
 				} else {
 					layer.msg('操作成功');
 				}
 			} else {
-				layer.msg(data.message);
+				layer.msg(data.retMsg);
 			}
 		}
 	});
@@ -137,14 +137,14 @@ function dealData(url, func) {
 		dataType : "json",
 		success : function(data) {
 			layer.closeAll();
-			if (data.statusCode == 200) {
+			if (data.retCode == 200) {
 				if (typeof func === "function") {
 					func();
 				} else {
 					layer.msg('操作成功');
 				}
 			} else {
-				layer.msg(data.message);
+				layer.msg(data.retMsg);
 			}
 		}
 	});
@@ -180,7 +180,7 @@ function checkData(url) {
 		url : url,
 		dataType : "json",
 		success : function(data) {
-			if (data.statusCode == 200) {
+			if (data.retCode == 200) {
 				flag = true;
 			}
 		}

@@ -52,8 +52,8 @@ function saveTemplate(){
 		data:{
 			content:$('textarea').val()
 		},
-		success:function(data){
-			if(data.statusCode==200){
+		success:function(result){
+			if(result.retCode == 200){
 				layer.msg('操作成功');
 			}
 		}

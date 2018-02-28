@@ -5,6 +5,9 @@
 <title>月光边境</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@ include file="/WEB-INF/jsp/common/style_easyui.jsp"%>
+<link rel="stylesheet" href="${ctx }/plugins/umeditor/themes/default/css/umeditor.min.css" />
+<script type="text/javascript" src="${ctx }/plugins/umeditor/umeditor.config.js"></script>
+<script type="text/javascript" src="${ctx }/plugins/umeditor/umeditor.min.js"></script>
 <body>
 <!-- 工具栏 -->
 <div id="toolbar" class="easyui-toolbar">

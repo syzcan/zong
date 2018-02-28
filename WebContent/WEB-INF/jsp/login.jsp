@@ -38,12 +38,12 @@ $('#form').form({
 		}
 		return valid;
 	},
-	success : function(data) {
-		data = eval('(' + data + ')');
-		if(data.statusCode == 200){
+	success : function(result) {
+		result = eval('(' + result + ')');
+		if(result.retCode == 200){
 			location.href='${ctx}/';
 		}else{
-			$.messager.alert('提示', data.message, 'warning');
+			$.messager.alert('提示', result.retMsg, 'warning');
 		}
 	}
 });

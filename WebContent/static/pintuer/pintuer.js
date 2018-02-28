@@ -304,10 +304,10 @@ $(function() {
 						async: false
 					});
 					$.getJSON($url,
-					function(data) {
+					function(result) {
 						//修改源码，返回消息根据现在的后台统一使用statusCode=200
 						//$getdata = data.getdata
-						$getdata = data.statusCode
+						$getdata = result.retCode
 					});
 					if ($getdata == 200) {
 					//if ($getdata == "true") {

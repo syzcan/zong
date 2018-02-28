@@ -96,6 +96,7 @@ public class CommonController {
 		}
 		try {
 			file.transferTo(f);
+			result.put("filePath", path);
 			// 视频文件生成封面缩略图
 			if ("video".equals(uploadType)) {
 				String cover = path.substring(0, path.lastIndexOf(".")) + ".jpg";

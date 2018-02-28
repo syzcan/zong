@@ -114,8 +114,8 @@
 				}
 				return $(options.form).form('validate');
 			},
-			success : function(data) {
-				result(options, eval('(' + data + ')'));
+			success : function(result) {
+				result(options, eval('(' + result + ')'));
 			}
 		});
 		// 渲染umeditor
@@ -158,8 +158,8 @@
 					type : 'post',
 					dataType : 'json',
 					data : data,
-					success : function(data) {
-						result(options, data);
+					success : function(result) {
+						result(options, result);
 					}
 				});
 			}
@@ -257,12 +257,12 @@
 			$('.layui-layer[type="loading"] .layui-layer-content').html(progress);
 		});
 		// 文件上传成功
-		uploader.on('uploadSuccess', function(file, data) {
+		uploader.on('uploadSuccess', function(file, result) {
 			layer.closeAll();
-			$(target).val(data.filePath);
-			$text.val(data.filePath);
+			$(target).val(result.filePath);
+			$text.val(result.filePath);
 			// success回调方法
-			options.success(data);
+			options.success(result);
 		});
 		uploader.on('uploadError', function(file, reason) {
 			layer.closeAll();
@@ -298,8 +298,8 @@
 	}
 
 	// 请求响应信息提示
-	function result(options, data, fn) {
-		if (data.statusCode == 200) {
+	function result(options, result, fn) {
+		if (result.retCode == 200) {
 			$.messager.show({
 				title : '提示',
 				msg : '操作成功',
@@ -314,7 +314,7 @@
 				options.gridtype == 'treegrid' ? $(options.datagrid).treegrid('reload') : $(options.datagrid).datagrid('reload');
 			}
 		} else {
-			$.messager.alert('提示', data.message, 'warning');
+			$.messager.alert('提示', result.retMsg, 'warning');
 		}
 	}
 

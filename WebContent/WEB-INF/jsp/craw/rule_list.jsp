@@ -7,6 +7,7 @@
 <%@ include file="/WEB-INF/jsp/common/style_easyui.jsp"%>
 <link rel="stylesheet" href="${ctx }/plugins/SyntaxHighlighter/shCoreDefault.css">
 <script type="text/javascript" src="${ctx }/plugins/SyntaxHighlighter/shCore.js"></script>
+<script type="text/javascript" src="${ctx }/plugins/jquery/jquery.format.js"></script>
 <script type="text/javascript" src="${ctx }/plugins/jquery/json-format.js"></script>
 <style>.validatebox-readonly{background: none;}</style>
 <body>
@@ -264,8 +265,7 @@
 	        	});
         	}
         	function code(title,result){
-        		code = JSON.stringify(result, null, 2);
-    			code = code.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+        		code = $.format(result, {method : 'json'});
     			$('#preview').html('<pre class="brush:java;toolbar:false;quick-code:false">'+code+'</pre>');
     			SyntaxHighlighter.highlight();
         		$('#dialog_result').dialog({title:title,width:'100%',height:'100%',modal:true});
@@ -273,8 +273,7 @@
         });
 </script>
 <div id="dialog_result">
-<div id="preview">
-		</div>
+	<div id="preview"></div>
 </div>
 </body>
 </html>

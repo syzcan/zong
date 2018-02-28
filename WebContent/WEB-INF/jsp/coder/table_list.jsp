@@ -165,8 +165,8 @@
     	
     	$(function(){
     		$('#reconnect').click(function(){
-    			$.get('${ctx}/coder/dbs/reconnect.json',function(data){
-    				if (data.statusCode == 200) {
+    			$.get('${ctx}/coder/dbs/reconnect.json',function(result){
+    				if (result.retCode == 200) {
     					$.messager.show({
     						title : '提示',
     						msg : '操作成功',
@@ -174,7 +174,7 @@
     						showType : 'slide'
     					});
     				} else {
-    					$.messager.alert('提示', data.message, 'warning');
+    					$.messager.alert('提示', result.retMsg, 'warning');
     				}
     			});
     		});
