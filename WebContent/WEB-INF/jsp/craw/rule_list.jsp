@@ -246,6 +246,8 @@
         	if(!$('#form').form('validate')){
         		return;
 			}
+        	serializeExt();
+        	layer.load(1);
         	var data = {craw_url:url,craw_item:$('#craw_item').textbox('getValue'),craw_next:$('#craw_next').textbox('getValue')};
         	if($('#test_type').combobox('getValue')=='list'){
 	        	$.each($('#dg_list_ext').datagrid('getRows'),function(i, row){
@@ -269,6 +271,7 @@
     			$('#preview').html('<pre class="brush:java;toolbar:false;quick-code:false">'+code+'</pre>');
     			SyntaxHighlighter.highlight();
         		$('#dialog_result').dialog({title:title,width:'100%',height:'100%',modal:true});
+        		layer.closeAll();
         	}
         });
 </script>

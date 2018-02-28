@@ -125,6 +125,13 @@
 			UM.getEditor(id);
 		});
 		// 自定义的上传控件渲染
+		$(options.form).find('.zuploadbt').each(function() {
+			// 解析参数
+			var ops = '{' + $.trim($(this).data('options')) + '}';
+			ops = (new Function("return " + ops))();
+			ops['type'] = 'uploadbt';
+			$(this).zuploadbox(ops);
+		});
 		$(options.form).find('.zuploadbox').each(function() {
 			// 解析参数
 			var ops = '{' + $.trim($(this).data('options')) + '}';
@@ -411,7 +418,7 @@
 			buttonText : '选择文件',
 			uploadType : 'file',// file/picture/music/video/document
 			width : 200,// 包括按钮和text
-			height : 30,
+			height : 28,
 			background : '#00b7ee',
 			color : '#fff',
 			editable : true,
@@ -454,13 +461,20 @@
 			message : '{1}'
 		}
 	});
-	// 上传按钮
+	// 页面初始化渲染自定义控件
 	$(function() {
+		// 自定义的上传控件渲染
 		$('.zuploadbt').each(function() {
 			// 解析参数
 			var ops = '{' + $.trim($(this).data('options')) + '}';
 			ops = (new Function("return " + ops))();
 			ops['type'] = 'uploadbt';
+			$(this).zuploadbox(ops);
+		});
+		$('.zuploadbox').each(function() {
+			// 解析参数
+			var ops = '{' + $.trim($(this).data('options')) + '}';
+			ops = (new Function("return " + ops))();
 			$(this).zuploadbox(ops);
 		});
 	});
