@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.zong.core.bean.Result;
+import com.zong.core.exception.ServiceException;
 import com.zong.core.util.FileUploadDownload;
 import com.zong.core.util.MD5Util;
 import com.zong.core.util.RandomCode;
@@ -100,7 +101,11 @@ public class CommonController {
 			// 视频文件生成封面缩略图
 			if ("video".equals(uploadType)) {
 				String cover = path.substring(0, path.lastIndexOf(".")) + ".jpg";
-				result = VideoUtil.thumbnail(request.getServletContext().getRealPath("/plugins/ffmpeg.exe"), savePath,
+				String ffmpegPath = request.getServletContext().getRealPath("/plugins/ffmpeg.exe");
+				if (!new File(ffmpegPath).exists()) {
+					throw new ServiceException("ffmpeg.exe不存在:" + ffmpegPath);
+				}
+				result = VideoUtil.thumbnail(ffmpegPath, savePath,
 						savePath.substring(0, savePath.lastIndexOf(".")) + ".jpg", "1");
 				result.put("cover", cover);
 				result.put("md5", MD5Util.fileMD5(savePath));

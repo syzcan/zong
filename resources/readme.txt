@@ -1,4 +1,4 @@
-zbase项目所用框架和技术：
+zone项目所用框架和技术：
 
 一、后端技术框架
 1.spring4.1.9
@@ -11,28 +11,26 @@ zbase项目所用框架和技术：
 8.模板工具freemarker-2.3.8.jar
 9.新一代模板工具beetl-2.2.5.jar【语法易懂性能更优】
 10.网页抓取和解析jsoup-1.9.1.jar【可方便构造http请求】
-11.excel生成工具poi-3.14.jar
+11.excel生成工具jstl-1.2.jar
 
 二、前端框架和插件
-1.pintuer1.2 作为基础样式
-	源码修改：pintuer.js第150行表单提示使用 layer.tips($checktext, this,{tipsMore: true});
-		   308行表单ajax校验;	
-2.layer-v3.0.3 Web弹层组件
-3.layDate v1.1 日期控件
-	源码修改：laydate.css第10行样式加上 -webkit-box-sizing:content-box;-moz-box-sizing:content-box;【解决在pintuer下变形问题】
-4.umeditor1.2.2 百度富文本编辑器UEditor Mini版本【包含模板引擎etpl】
-	源码修改：umeditor.css第一行增加以下样式【解决pintuer.css样式box-sizing:border-box造成图片拖动缩放一直变小问题】
-	.edui-scale{-webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;}
-5.SyntaxHighlighter 代码高亮插件核心文件，从UEditor中抽取出来自己修改的
-6.uploadify3.2.1上传控件flash版本
-7.webuploader0.1.5百度上传控件完全版包含flash和html5版本
-8.echarts.min.js百度纯 Javascript 的图表库
-9.jquery.masonry.min.js基于jquery的瀑布流插件
-10.perfect-scrollbar v0.6.16滚动条插件
-11.ztree v3.5.28
+1.EasyUI for jQuery 1.5.4.1	
+2.Font Awesome 4.7.0 图标字体库
+3.jQuery v1.11.3
+4.layer-v3.0.3 Web弹层组件
+5.umeditor1.2.2 百度富文本编辑器UEditor Mini版本【包含模板引擎etpl，已删除third-party中的公式和页面公式图标】
+6.webuploader0.1.5 百度上传控件完全版包含flash和html5版本
+7.SyntaxHighlighter 代码高亮插件核心文件，从UEditor中抽取出来自己修改的
+8.Viewer v0.5.0 图片浏览器
+9.ckplayer X 视频播放器
+10.ffmpeg.exe 读取视频媒体信息，截图功能
+11.Bootstrap v3.3.7【单独的展示页面使用】
 
 三、自定义工具
-1.前端工具类zutil.js【依赖jquery、layer】
+1.easyui.zextend.js
+     封装easyui基于datagrid通用的弹出层增删改等操作，通过绑定按钮实现【上传控件依赖webuploder和layer，富文本umeditor】
+2.easyui/themes/zone【自定义主题美化】
+3.zdb3.0.jar 【自定义数据库客户端，整合代码生成功能】
 
 四、jar包依赖关系
 1.jedis-2.6.1.jar【commons-pool2-2.4.2.jar】

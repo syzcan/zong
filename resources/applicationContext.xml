@@ -16,8 +16,9 @@
 	<!-- 数据源配置 -->
 	<import resource="applicationContext-db.xml" />
 	<!-- 缓存配置 -->
-<!-- 	<import resource="applicationContext-cache.xml" /> -->
+	<import resource="applicationContext-cache.xml" />
 	
+	<!-- 自定义连接数据库工具类，可以查看表结构 -->
 	<bean id="jdbcCodeService" class="com.zong.zdb.service.JdbcCodeService">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
 		<property name="url" value="${jdbc.url}" />

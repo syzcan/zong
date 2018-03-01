@@ -10,6 +10,7 @@ import org.jaudiotagger.audio.mp3.MP3AudioHeader;
 import org.jaudiotagger.audio.mp3.MP3File;
 
 import com.zong.core.bean.Result;
+import com.zong.core.exception.ServiceException;
 
 /**
  * 获得MP3文件的信息
@@ -29,13 +30,14 @@ public class MP3Info {
 			try {
 				MP3Info info = new MP3Info(music);
 				info.setCharset("gbk");
-				//System.out.println("标题：" + info.getSongName());
-				//System.out.println("艺术家：" + info.getArtist());
-				//System.out.println("专辑：" + info.getAlbum());
-				System.out.println(new String(info.buf,"gbk"));
-				//MP3File f = (MP3File) AudioFileIO.read(music);
-				//MP3AudioHeader audioHeader = (MP3AudioHeader) f.getAudioHeader();
-				//System.out.println("长度：" + audioHeader.getTrackLength());
+				// System.out.println("标题：" + info.getSongName());
+				// System.out.println("艺术家：" + info.getArtist());
+				// System.out.println("专辑：" + info.getAlbum());
+				System.out.println(new String(info.buf, "gbk"));
+				// MP3File f = (MP3File) AudioFileIO.read(music);
+				// MP3AudioHeader audioHeader = (MP3AudioHeader)
+				// f.getAudioHeader();
+				// System.out.println("长度：" + audioHeader.getTrackLength());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -63,7 +65,7 @@ public class MP3Info {
 			result.put("artist", info.getArtist());
 			result.put("album", info.getAlbum());
 		} catch (Exception e) {
-
+			throw new ServiceException("mp3解析失败:" + music.getAbsolutePath());
 		}
 		return result;
 	}
