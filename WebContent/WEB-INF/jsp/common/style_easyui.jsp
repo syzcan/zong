@@ -14,4 +14,3 @@
 <script type="text/javascript" src="${ctx}/plugins/easyui/easyui.zextend.js"></script>
 <script type="text/javascript" src="${ctx}/plugins/webuploader/webuploader.min.js"></script>
 <script type="text/javascript" src="${ctx}/plugins/layer/layer.js"></script>
-<script type="text/javascript" src="${ctx}/static/pintuer/zcommon.js"></script>
